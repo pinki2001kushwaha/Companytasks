@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Editable Table</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script>
+    const { useState } = React;
+
+    function EditableTable() {
+      const [data, setData] = useState([
+        { name: "Shraddha", age: 23, city: "Rewa" },
+        { name: "Priya", age: 24, city: "Bhopal" }
+      ]);
+
+      const handleChange = (index, field, value) => {
+        const updatedData = [...data];
+        updatedData[index][field] = value;
+        setData(updatedData);
+      };
+
+      const handleSave = () => {
+        console.log("Data ready to post", data);
+      };
+
+      return React.createElement(
+        "div",
+        null,
+        React.createElement("h1", null, "Editable Table"),
+        React.createElement(
+          "table",
+          { border: "1", style: { width: "100%", textAlign: "left" } },
+          React.createElement(
+            "thead",
+            null,
+            React.createElement(
+              "tr",
+              null,
+              React.createElement("th", null, "Name"),
+              React.createElement("th", null, "Age"),
+              React.createElement("th", null, "City")
+            )
+          ),
+          React.createElement(
+            "tbody",
+            null,
+            data.map((row, index) =>
+              React.createElement(
+                "tr",
+                { key: index },
+                Object.keys(row).map((field) =>
+                  React.createElement(
+                    "td",
+                    { key: field },
+                    React.createElement("input", {
+                      type: "text",
+                      value: row[field],
+                      onChange: (e) => handleChange(index, field, e.target.value),
+                    })
+                  )
+                )
+              )
+            )
+          )
+        ),
+        React.createElement(
+          "button",
+          { onClick: handleSave, style: { marginTop: "10px" } },
+          "Save"
+        )
+      );
+    }
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(React.createElement(EditableTable));
+  </script>
+</body>
+</html>
